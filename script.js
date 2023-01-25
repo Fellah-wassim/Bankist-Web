@@ -72,7 +72,7 @@ const displayMovement = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-displayMovement(account1.movements);
+// displayMovement(account1.movements);
 
 const createUsernames = function (accounts) {
   accounts.forEach(account => {
@@ -84,8 +84,8 @@ const createUsernames = function (accounts) {
   });
 };
 
-createUsernames(accounts);
-console.log(accounts);
+// createUsernames(accounts);
+// console.log(accounts);
 
 // LECTURES
 

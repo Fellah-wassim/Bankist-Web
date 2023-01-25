@@ -74,6 +74,19 @@ const displayMovement = function (movements) {
 };
 displayMovement(account1.movements);
 
+const createUsernames = function (accounts) {
+  accounts.forEach(account => {
+    account.userName = account.owner
+      .toLowerCase()
+      .split(' ')
+      .map(el => el.charAt(0))
+      .join('');
+  });
+};
+
+createUsernames(accounts);
+console.log(accounts);
+
 // LECTURES
 
 const currencies = new Map([

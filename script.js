@@ -143,9 +143,3 @@ const withdrawals = movements.filter(mov => mov < 0);
 // const eurToUsd = 1.1;
 // const movementsUsd = movements.map(mov => mov * eurToUsd);
 // console.log(movementsUsd);
-
-//using reduce method to calculate max
-// const max = movements.reduce(function (acc, mov) {
-//   return mov > acc ? mov : acc;
-// }, movements[0]);
-// console.log(max);

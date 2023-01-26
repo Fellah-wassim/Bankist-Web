@@ -2,7 +2,7 @@
 
 // Data
 const account1 = {
-  owner: 'Jonas Schmedtmann',
+  owner: 'Wassim Fellah',
   movements: [200, 450, -400, 3000, -650, -130, 70, 1300],
   interestRate: 1.2, // %
   pin: 1111,
@@ -72,25 +72,25 @@ const displayMovement = function (movements) {
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
-// displayMovement(account1.movements);
 
-const calcDisplaySummary = function (movements) {
-  const incomes = movements
+const calcDisplaySummary = function (account) {
+  const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => mov + acc, 0);
   labelSumIn.textContent = `${incomes}€`;
-  const outcomes = movements
+  const outcomes = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => mov + acc, 0);
   labelSumOut.textContent = `${Math.abs(outcomes)}€`;
-  const interest = movements
+  const interest = account.movements
     .filter(mov => mov > 0)
     .reduce(function (acc, deposit) {
-      return (1.2 * deposit) / 100 >= 1 ? acc + (1.2 * deposit) / 100 : acc;
+      return (account.interestRate * deposit) / 100 >= 1
+        ? acc + (account.interestRate * deposit) / 100
+        : acc;
     }, 0);
   labelSumInterest.textContent = `${interest}€`;
 };
-// calcDisplaySummary(account1.movements);
 
 const createUsernames = function (accounts) {
   accounts.forEach(account => {
@@ -101,14 +101,34 @@ const createUsernames = function (accounts) {
       .join('');
   });
 };
-// createUsernames(accounts);
+createUsernames(accounts);
 
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.innerHTML = `${balance}€`;
 };
-// calcPrintBalance(account1.movements);
 
+//Event handlers
+let currentAccount;
+btnLogin.addEventListener('click', function (e) {
+  //prevent form from submitting to avoid refreshing
+  e.preventDefault();
+  currentAccount = accounts.find(
+    account => account.userName === inputLoginUsername.value
+  );
+  if (Number(inputLoginPin.value) === currentAccount?.pin) {
+    console.log(currentAccount);
+    labelWelcome.textContent = `Welcome back ${
+      currentAccount.owner.split(' ')[0]
+    }!`;
+    displayMovement(currentAccount.movements);
+    calcDisplaySummary(currentAccount);
+    calcDisplayBalance(currentAccount.movements);
+    containerApp.style.opacity = 100;
+    inputLoginPin.value = inputLoginUsername.value = '';
+    inputLoginPin.blur();
+  }
+});
 // LECTURES
 
 const currencies = new Map([

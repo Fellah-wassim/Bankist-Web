@@ -74,7 +74,16 @@ nav {
   cursor: pointer;
   transition: all 0.3s;
 }
-
+.logout__btn {
+  border: none;
+  background: none;
+  font-size: 1.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s;
+  display: none;
+  padding: 0 11rem;
+}
 .login__btn:hover,
 .login__btn:focus,
 .btn--sort:hover,

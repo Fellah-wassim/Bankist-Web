@@ -43,7 +43,9 @@ const labelTimer = document.querySelector('.timer');
 const containerApp = document.querySelector('.app');
 const containerMovements = document.querySelector('.movements');
 
+const loginForm = document.querySelector('.login');
 const btnLogin = document.querySelector('.login__btn');
+const btnLogout = document.querySelector('.logout__btn');
 const btnTransfer = document.querySelector('.form__btn--transfer');
 const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
@@ -108,7 +110,25 @@ const calcDisplayBalance = function (movements) {
   labelBalance.innerHTML = `${balance}€`;
 };
 
+const whenLogOutDisplay = function () {
+  containerApp.style.opacity = 0;
+  inputLoginPin.value = inputLoginUsername.value = '';
+  inputLoginPin.blur();
+  btnLogout.style.display = 'none';
+  loginForm.style.display = 'block';
+};
+
+const whenLogInDisplay = function () {
+  containerApp.style.opacity = 100;
+  inputLoginPin.value = inputLoginUsername.value = '';
+  inputLoginPin.blur();
+  btnLogout.style.display = 'block';
+  loginForm.style.display = 'none';
+};
+
 //Event handlers
+btnLogout.addEventListener('click', whenLogOutDisplay);
+
 let currentAccount;
 btnLogin.addEventListener('click', function (e) {
   //prevent form from submitting to avoid refreshing
@@ -123,9 +143,7 @@ btnLogin.addEventListener('click', function (e) {
     displayMovement(currentAccount.movements);
     calcDisplaySummary(currentAccount);
     calcDisplayBalance(currentAccount.movements);
-    containerApp.style.opacity = 100;
-    inputLoginPin.value = inputLoginUsername.value = '';
-    inputLoginPin.blur();
+    whenLogInDisplay();
   }
 });
 
@@ -140,9 +158,7 @@ btnClose.addEventListener('click', function (e) {
     );
     console.log(indexOfDeletedAccount);
     accounts.splice(indexOfDeletedAccount, 1);
-    containerApp.style.opacity = 0;
-    inputCloseUsername.value = inputClosePin.value = '';
-    inputClosePin.blur();
+    whenLogOutDisplay();
   }
 });
 // LECTURES

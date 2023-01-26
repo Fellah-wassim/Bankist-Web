@@ -187,6 +187,13 @@ const currencies = new Map([
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const withdrawals = movements.filter(mov => mov < 0);
 
-// const eurToUsd = 1.1;
-// const movementsUsd = movements.map(mov => mov * eurToUsd);
-// console.log(movementsUsd);
+// const allBalance = accounts
+//   .map(account => account.movements)
+//   .flat(1)
+//   .reduce((acc, mov, i, arr) => acc + mov, 0);
+// console.log(allBalance);
+
+// const allBalance2 = accounts
+//   .flatMap(account => account.movements)
+//   .reduce((acc, mov, i, arr) => acc + mov, 0);
+// console.log(allBalance2);

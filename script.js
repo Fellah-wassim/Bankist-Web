@@ -83,9 +83,13 @@ const createUsernames = function (accounts) {
       .join('');
   });
 };
-
 // createUsernames(accounts);
-// console.log(accounts);
+
+const calcDisplayBalance = function (movements) {
+  const balance = movements.reduce((acc, mov) => acc + mov, 0);
+  labelBalance.innerHTML = `${balance}$`;
+};
+// calcPrintBalance(account1.movements);
 
 // LECTURES
 
@@ -96,6 +100,14 @@ const currencies = new Map([
 ]);
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
+const withdrawals = movements.filter(mov => mov < 0);
+
 // const eurToUsd = 1.1;
 // const movementsUsd = movements.map(mov => mov * eurToUsd);
 // console.log(movementsUsd);
+
+//using reduce method to calculate max
+// const max = movements.reduce(function (acc, mov) {
+//   return mov > acc ? mov : acc;
+// }, movements[0]);
+// console.log(max);

@@ -117,7 +117,6 @@ btnLogin.addEventListener('click', function (e) {
     account => account.userName === inputLoginUsername.value
   );
   if (Number(inputLoginPin.value) === currentAccount?.pin) {
-    console.log(currentAccount);
     labelWelcome.textContent = `Welcome back ${
       currentAccount.owner.split(' ')[0]
     }!`;
@@ -127,6 +126,23 @@ btnLogin.addEventListener('click', function (e) {
     containerApp.style.opacity = 100;
     inputLoginPin.value = inputLoginUsername.value = '';
     inputLoginPin.blur();
+  }
+});
+
+btnClose.addEventListener('click', function (e) {
+  e.preventDefault();
+  if (
+    Number(inputClosePin.value) === currentAccount?.pin &&
+    inputCloseUsername.value === currentAccount?.userName
+  ) {
+    const indexOfDeletedAccount = accounts.findIndex(
+      account => account.userName === inputCloseUsername.value
+    );
+    console.log(indexOfDeletedAccount);
+    accounts.splice(indexOfDeletedAccount, 1);
+    containerApp.style.opacity = 0;
+    inputCloseUsername.value = inputClosePin.value = '';
+    inputClosePin.blur();
   }
 });
 // LECTURES

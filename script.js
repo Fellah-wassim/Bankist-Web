@@ -116,6 +116,7 @@ const whenLogOutDisplay = function () {
   inputLoginPin.blur();
   btnLogout.style.display = 'none';
   loginForm.style.display = 'block';
+  labelWelcome.textContent = 'Log in to get started';
 };
 
 const whenLogInDisplay = function () {

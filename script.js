@@ -112,6 +112,7 @@ const calcDisplayBalance = function (movements) {
 
 const whenLogOutDisplay = function () {
   containerApp.style.opacity = 0;
+  containerApp.style.display = 'none';
   inputLoginPin.value = inputLoginUsername.value = '';
   inputLoginPin.blur();
   btnLogout.style.display = 'none';
@@ -121,6 +122,7 @@ const whenLogOutDisplay = function () {
 
 const whenLogInDisplay = function () {
   containerApp.style.opacity = 100;
+  containerApp.style.display = 'grid';
   inputLoginPin.value = inputLoginUsername.value = '';
   inputLoginPin.blur();
   btnLogout.style.display = 'block';

@@ -104,6 +104,7 @@ nav {
 
   /* NOTE This creates the fade in/out anumation */
   opacity: 0;
+  display: none;
   transition: all 1s;
 }
 

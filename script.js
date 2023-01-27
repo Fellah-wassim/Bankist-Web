@@ -81,7 +81,7 @@ const displayMovement = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div> 
-        <div class="movements__value">${movement}</div>
+        <div class="movements__value">${movement.toFixed(2)} €</div>
       </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
@@ -159,7 +159,7 @@ btnLogin.addEventListener('click', function (e) {
   currentAccount = accounts.find(
     account => account.userName === inputLoginUsername.value
   );
-  if (Number(inputLoginPin.value) === currentAccount?.pin) {
+  if (+inputLoginPin.value === currentAccount?.pin) {
     labelWelcome.textContent = `Welcome back ${
       currentAccount.owner.split(' ')[0]
     }!`;
@@ -170,13 +170,13 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputTransferAmount.value);
+  const amount = +inputTransferAmount.value;
   const receiverAccount = accounts.find(
     account => account.userName === inputTransferTo.value
   );
   if (
     receiverAccount?.userName != currentAccount.userName &&
-    amount <= Number(labelBalance.textContent.replace('€', ''))
+    amount <= +labelBalance.textContent.replace('€', '')
   ) {
     currentAccount.movements.push(-amount);
     updateUI(currentAccount);
@@ -188,7 +188,7 @@ btnTransfer.addEventListener('click', function (e) {
 
 btnLoan.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = Number(inputLoanAmount.value);
+  const amount = Math.round(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     currentAccount.movements.push(amount);
     updateUI(currentAccount);
@@ -199,7 +199,7 @@ btnLoan.addEventListener('click', function (e) {
 btnClose.addEventListener('click', function (e) {
   e.preventDefault();
   if (
-    Number(inputClosePin.value) === currentAccount?.pin &&
+    +inputClosePin.value === currentAccount?.pin &&
     inputCloseUsername.value === currentAccount?.userName
   ) {
     const indexOfDeletedAccount = accounts.findIndex(
@@ -241,3 +241,8 @@ const withdrawals = movements.filter(mov => mov < 0);
 //   .flatMap(account => account.movements)
 //   .reduce((acc, mov, i, arr) => acc + mov, 0);
 // console.log(allBalance2);
+
+// const randomInt = (min, max) =>
+//   Math.trunc(Math.random() * (max - min + 1)) + min;
+// console.log(randomInt(10, 11));
+// console.log(Math.floor(-23.3));

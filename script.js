@@ -164,7 +164,7 @@ btnTransfer.addEventListener('click', function (e) {
     account => account.userName === inputTransferTo.value
   );
   if (
-    receiverAccount?.userName &&
+    receiverAccount?.userName != currentAccount.userName &&
     amount <= Number(labelBalance.textContent.replace('€', ''))
   ) {
     currentAccount.movements.push(-amount);

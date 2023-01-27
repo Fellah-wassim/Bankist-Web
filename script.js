@@ -51,6 +51,7 @@ const btnLoan = document.querySelector('.form__btn--loan');
 const btnClose = document.querySelector('.form__btn--close');
 const btnSort = document.querySelector('.btn--sort');
 
+const allFormInput = document.querySelectorAll('.form__input');
 const inputLoginUsername = document.querySelector('.login__input--user');
 const inputLoginPin = document.querySelector('.login__input--pin');
 const inputTransferTo = document.querySelector('.form__input--to');
@@ -119,6 +120,7 @@ const whenLogOutDisplay = function () {
   btnLogout.style.display = 'none';
   loginForm.style.display = 'block';
   labelWelcome.textContent = 'Log in to get started';
+  allFormInput.forEach(form => (form.value = ''));
 };
 
 const whenLogInDisplay = function () {
@@ -128,6 +130,7 @@ const whenLogInDisplay = function () {
   inputLoginPin.blur();
   btnLogout.style.display = 'block';
   loginForm.style.display = 'none';
+  allFormInput.forEach(form => (form.value = ''));
 };
 
 const updateUI = function (account) {
@@ -151,6 +154,24 @@ btnLogin.addEventListener('click', function (e) {
     }!`;
     updateUI(currentAccount);
     whenLogInDisplay();
+  }
+});
+
+btnTransfer.addEventListener('click', function (e) {
+  e.preventDefault();
+  const amount = Number(inputTransferAmount.value);
+  const receiverAccount = accounts.find(
+    account => account.userName === inputTransferTo.value
+  );
+  if (
+    receiverAccount?.userName &&
+    amount <= Number(labelBalance.textContent.replace('€', ''))
+  ) {
+    currentAccount.movements.push(-amount);
+    updateUI(currentAccount);
+    inputTransferTo.value = inputTransferAmount.value = '';
+    inputTransferAmount.blur();
+    receiverAccount.movements.push(amount);
   }
 });
 

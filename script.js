@@ -81,7 +81,7 @@ const displayMovement = function (movements, sort = false) {
         <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div> 
-        <div class="movements__value">${movement.toFixed(2)} €</div>
+        <div class="movements__value">${movement.toFixed(2)}€</div>
       </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);

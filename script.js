@@ -71,16 +71,37 @@ const inputLoanAmount = document.querySelector('.form__input--loan-amount');
 const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
-const displayMovement = function (movements, sort = false) {
+const intoDateForm = function (date) {
+  const now = new Date();
+  const day = `${now.getDate()}`.padStart(2, '0');
+  const month = `${now.getMonth() + 1}`.padStart(2, '0');
+  const year = now.getFullYear();
+  return `${day}/${month}/${year}`;
+};
+
+const intoTimeForm = function (date) {
+  const now = new Date();
+  const hour = `${now.getHours()}`.padStart(2, '0');
+  const minutes = `${now.getMinutes()}`.padStart(2, '0');
+  return `${hour}:${minutes}`;
+};
+
+const displayMovement = function (account, sort = false) {
   containerMovements.innerHTML = '';
-  const movSorted = sort ? movements.slice().sort((a, b) => a - b) : movements;
+  const movSorted = sort
+    ? account.movements.slice().sort((a, b) => a - b)
+    : account.movements;
   movSorted.forEach(function (movement, index, array) {
     const type = movement < 0 ? 'withdrawal' : 'deposit';
+    const date = new Date(account.movementsDates[index]);
+    const displayDate = intoDateForm(date);
+    const displayTime = intoTimeForm(date);
     const html = ` 
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div> 
+        <div class="movements__date">${displayDate}, <time class="movements__time">${displayTime}</time></div>
         <div class="movements__value">${movement.toFixed(2)}€</div>
       </div>
     `;
@@ -142,10 +163,14 @@ const whenLogInDisplay = function () {
   btnLogout.style.display = 'block';
   loginForm.style.display = 'none';
   allFormInput.forEach(form => (form.value = ''));
+  const now = new Date();
+  const displayDate = intoDateForm(now);
+  const displayTime = intoTimeForm(now);
+  labelDate.textContent = `${displayDate}, ${displayTime}`;
 };
 
 const updateUI = function (account) {
-  displayMovement(account.movements);
+  displayMovement(account);
   calcDisplaySummary(account);
   calcDisplayBalance(account.movements);
 };
@@ -179,6 +204,7 @@ btnTransfer.addEventListener('click', function (e) {
     amount <= +labelBalance.textContent.replace('€', '')
   ) {
     currentAccount.movements.push(-amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
     inputTransferTo.value = inputTransferAmount.value = '';
     inputTransferAmount.blur();
@@ -191,6 +217,7 @@ btnLoan.addEventListener('click', function (e) {
   const amount = Math.round(inputLoanAmount.value);
   if (amount > 0 && currentAccount.movements.some(mov => mov >= amount * 0.1)) {
     currentAccount.movements.push(amount);
+    currentAccount.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
   }
   inputLoanAmount.value = '';
@@ -213,7 +240,7 @@ btnClose.addEventListener('click', function (e) {
 
 let sorted = false;
 btnSort.addEventListener('click', function () {
-  displayMovement(currentAccount.movements, !sorted);
+  displayMovement(currentAccount, !sorted);
   sorted
     ? (btnSort.innerHTML = '&downarrow; SORT')
     : (btnSort.innerHTML = '&uparrow; SORT');
@@ -246,3 +273,10 @@ const withdrawals = movements.filter(mov => mov < 0);
 //   Math.trunc(Math.random() * (max - min + 1)) + min;
 // console.log(randomInt(10, 11));
 // console.log(Math.floor(-23.3));
+
+// // login for test
+// currentAccount = account1;
+// updateUI(currentAccount);
+// containerApp.style.opacity = 100;
+// containerApp.style.display = 'block';
+// whenLogInDisplay(currentAccount);

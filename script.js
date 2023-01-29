@@ -18,7 +18,7 @@ const account1 = {
     '2023-01-29T10:51:36.790Z',
   ],
   currency: 'EUR',
-  locale: 'pt-PT', // de-DE
+  local: 'en-US', // de-DE
 };
 
 const account2 = {
@@ -38,10 +38,22 @@ const account2 = {
     '2020-07-26T12:01:20.894Z',
   ],
   currency: 'USD',
-  locale: 'en-US',
+  local: 'fr-FR',
 };
 
 const accounts = [account1, account2];
+
+const optionsDate = {
+  day: 'numeric',
+  month: 'numeric',
+  year: 'numeric',
+};
+
+const optionsTime = {
+  hour: 'numeric',
+  minute: 'numeric',
+  hour12: 'true',
+};
 
 // Elements
 const labelWelcome = document.querySelector('.welcome');
@@ -80,7 +92,9 @@ const intoDateForm = function (date) {
   return `${day}/${month}/${year}`;
 };
 
-const intoDateFormMovements = function (date) {
+const displayDateWithApi = function (local, date, ToDisplayBalance = false) {
+  if (ToDisplayBalance)
+    return new Intl.DateTimeFormat(local, optionsDate).format(date);
   const now = new Date();
   const dateOfMov = new Date(date);
   let days = calcDaysPassed(dateOfMov, now);
@@ -93,8 +107,12 @@ const intoDateFormMovements = function (date) {
       return 'Yesterday';
       break;
     default:
-      return intoDateForm(date);
+      return new Intl.DateTimeFormat(local, optionsDate).format(date);
   }
+};
+
+const displayTimeWithApi = function (local, date) {
+  return new Intl.DateTimeFormat(local, optionsTime).format(date);
 };
 
 const intoTimeForm = function (date) {
@@ -112,8 +130,8 @@ const displayMovement = function (account, sort = false) {
   movSorted.forEach(function (movement, index, array) {
     const type = movement < 0 ? 'withdrawal' : 'deposit';
     const date = new Date(account.movementsDates[index]);
-    const displayDate = intoDateFormMovements(date);
-    const displayTime = intoTimeForm(date);
+    const displayDate = displayDateWithApi(account.local, date);
+    const displayTime = displayTimeWithApi(account.local, date);
     const html = ` 
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
@@ -186,8 +204,8 @@ const whenLogInDisplay = function () {
   loginForm.style.display = 'none';
   allFormInput.forEach(form => (form.value = ''));
   const now = new Date();
-  const displayDate = intoDateForm(now);
-  const displayTime = intoTimeForm(now);
+  const displayDate = displayDateWithApi(currentAccount.local, now, true);
+  const displayTime = displayTimeWithApi(currentAccount.local, now);
   labelDate.textContent = `${displayDate}, ${displayTime}`;
 };
 

@@ -17,7 +17,7 @@ const account1 = {
     '2023-01-28T23:36:17.929Z',
     '2023-01-29T10:51:36.790Z',
   ],
-  currency: 'EUR',
+  currency: 'USD',
   local: 'en-US', // de-DE
 };
 
@@ -37,7 +37,7 @@ const account2 = {
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
   ],
-  currency: 'USD',
+  currency: 'DZD',
   local: 'fr-FR',
 };
 
@@ -132,28 +132,41 @@ const displayMovement = function (account, sort = false) {
     const date = new Date(account.movementsDates[index]);
     const displayDate = displayDateWithApi(account.local, date);
     const displayTime = displayTimeWithApi(account.local, date);
+    const formattedMov = formatCurrency(account, movement.toFixed(2));
     const html = ` 
       <div class="movements__row">
         <div class="movements__type movements__type--${type}">${
       index + 1
     } ${type}</div> 
         <div class="movements__date">${displayDate}, <time class="movements__time">${displayTime}</time></div>
-        <div class="movements__value">${movement.toFixed(2)}€</div>
+        <div class="movements__value">${formattedMov}</div>
       </div>
     `;
     containerMovements.insertAdjacentHTML('afterbegin', html);
   });
 };
 
+const formatCurrency = function (account, expression) {
+  return new Intl.NumberFormat(account.local, {
+    currency: account.currency,
+    style: 'currency',
+  }).format(expression);
+};
+
 const calcDisplaySummary = function (account) {
   const incomes = account.movements
     .filter(mov => mov > 0)
     .reduce((acc, mov) => mov + acc, 0);
-  labelSumIn.textContent = `${Math.trunc(incomes * 100) / 100}€`;
+  const sumIn = formatCurrency(account, Math.trunc(incomes * 100) / 100);
+  labelSumIn.textContent = `${sumIn}`;
   const outcomes = account.movements
     .filter(mov => mov < 0)
     .reduce((acc, mov) => mov + acc, 0);
-  labelSumOut.textContent = `${Math.abs(Math.trunc(outcomes * 100) / 100)}€`;
+  const sumOut = formatCurrency(
+    account,
+    Math.abs(Math.trunc(outcomes * 100) / 100)
+  );
+  labelSumOut.textContent = `${sumOut}`;
   const interest = account.movements
     .filter(mov => mov > 0)
     .reduce(function (acc, deposit) {
@@ -161,7 +174,8 @@ const calcDisplaySummary = function (account) {
         ? acc + (account.interestRate * deposit) / 100
         : acc;
     }, 0);
-  labelSumInterest.textContent = `${Math.trunc(interest * 100) / 100}€`;
+  const sumInterest = formatCurrency(account, Math.trunc(interest * 100) / 100);
+  labelSumInterest.textContent = `${sumInterest}`;
 };
 
 const createUsernames = function (accounts) {
@@ -175,9 +189,13 @@ const createUsernames = function (accounts) {
 };
 createUsernames(accounts);
 
-const calcDisplayBalance = function (movements) {
-  const balance = movements.reduce((acc, mov) => acc + mov, 0);
-  labelBalance.innerHTML = `€ ${Math.trunc(balance * 100) / 100}`;
+const calcDisplayBalance = function (account) {
+  const balance = account.movements.reduce((acc, mov) => acc + mov, 0);
+  const displayBalance = formatCurrency(
+    account,
+    Math.trunc(balance * 100) / 100
+  );
+  labelBalance.innerHTML = `${displayBalance}`;
 };
 
 const calcDaysPassed = function (date1, date2) {
@@ -212,7 +230,7 @@ const whenLogInDisplay = function () {
 const updateUI = function (account) {
   displayMovement(account);
   calcDisplaySummary(account);
-  calcDisplayBalance(account.movements);
+  calcDisplayBalance(account);
 };
 
 //Event handlers
@@ -297,26 +315,3 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const withdrawals = movements.filter(mov => mov < 0);
-
-// const allBalance = accounts
-//   .map(account => account.movements)
-//   .flat(1)
-//   .reduce((acc, mov, i, arr) => acc + mov, 0);
-// console.log(allBalance);
-
-// const allBalance2 = accounts
-//   .flatMap(account => account.movements)
-//   .reduce((acc, mov, i, arr) => acc + mov, 0);
-// console.log(allBalance2);
-
-// const randomInt = (min, max) =>
-//   Math.trunc(Math.random() * (max - min + 1)) + min;
-// console.log(randomInt(10, 11));
-// console.log(Math.floor(-23.3));
-
-// // login for test
-// currentAccount = account1;
-// updateUI(currentAccount);
-// containerApp.style.opacity = 100;
-// containerApp.style.display = 'block';
-// whenLogInDisplay(currentAccount);

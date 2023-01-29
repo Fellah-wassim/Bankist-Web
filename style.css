@@ -163,7 +163,11 @@ nav {
   font-weight: 500;
   color: #666;
 }
-
+.movements__time {
+  font-size: 1.1rem;
+  color: #333;
+  font-weight: bold;
+}
 .movements__type--deposit {
   background-image: linear-gradient(to top left, #39b385, #9be15d);
 }

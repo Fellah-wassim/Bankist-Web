@@ -14,8 +14,8 @@ const account1 = {
     '2020-04-01T10:17:24.185Z',
     '2020-05-08T14:11:59.604Z',
     '2020-05-27T17:01:17.194Z',
-    '2020-07-11T23:36:17.929Z',
-    '2020-07-12T10:51:36.790Z',
+    '2023-01-28T23:36:17.929Z',
+    '2023-01-29T10:51:36.790Z',
   ],
   currency: 'EUR',
   locale: 'pt-PT', // de-DE
@@ -42,6 +42,7 @@ const account2 = {
 };
 
 const accounts = [account1, account2];
+
 // Elements
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
@@ -72,15 +73,32 @@ const inputCloseUsername = document.querySelector('.form__input--user');
 const inputClosePin = document.querySelector('.form__input--pin');
 
 const intoDateForm = function (date) {
-  const now = new Date();
+  const now = new Date(date);
   const day = `${now.getDate()}`.padStart(2, '0');
   const month = `${now.getMonth() + 1}`.padStart(2, '0');
   const year = now.getFullYear();
   return `${day}/${month}/${year}`;
 };
 
-const intoTimeForm = function (date) {
+const intoDateFormMovements = function (date) {
   const now = new Date();
+  const dateOfMov = new Date(date);
+  let days = calcDaysPassed(dateOfMov, now);
+  days = Math.round(days);
+  switch (days) {
+    case 0:
+      return 'Today';
+      break;
+    case 1:
+      return 'Yesterday';
+      break;
+    default:
+      return intoDateForm(date);
+  }
+};
+
+const intoTimeForm = function (date) {
+  const now = new Date(date);
   const hour = `${now.getHours()}`.padStart(2, '0');
   const minutes = `${now.getMinutes()}`.padStart(2, '0');
   return `${hour}:${minutes}`;
@@ -94,7 +112,7 @@ const displayMovement = function (account, sort = false) {
   movSorted.forEach(function (movement, index, array) {
     const type = movement < 0 ? 'withdrawal' : 'deposit';
     const date = new Date(account.movementsDates[index]);
-    const displayDate = intoDateForm(date);
+    const displayDate = intoDateFormMovements(date);
     const displayTime = intoTimeForm(date);
     const html = ` 
       <div class="movements__row">
@@ -142,6 +160,10 @@ createUsernames(accounts);
 const calcDisplayBalance = function (movements) {
   const balance = movements.reduce((acc, mov) => acc + mov, 0);
   labelBalance.innerHTML = `€ ${Math.trunc(balance * 100) / 100}`;
+};
+
+const calcDaysPassed = function (date1, date2) {
+  return Math.abs(date2 - date1) / (1000 * 60 * 60 * 24);
 };
 
 const whenLogOutDisplay = function () {

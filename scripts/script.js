@@ -56,13 +56,13 @@ const optionsTime = {
 };
 
 const backgroundPicsUrls = [
-  'url(/backgroundImages/pexels-cup-of-couple-6956764.jpg)',
-  'url(/backgroundImages/christian-wiediger-F8IAN0lyFJU-unsplash.jpg)',
-  'url(/backgroundImages/pexels-antoni-shkraba-6207767.jpg)',
-  'url(/backgroundImages/floriane-vita-FyD3OWBuXnY-unsplash.jpg)',
-  'url(/backgroundImages/pexels-ono-kosuki-5999936.jpg)',
-  'url(/backgroundImages/pexels-adrien-olichon-3709402.jpg)',
-  'url(/backgroundImages/pexels-cup-of-couple-6634170.jpg)',
+  'url(/imgs/backgroundImages/pexels-cup-of-couple-6956764.jpg)',
+  'url(/imgs/backgroundImages/christian-wiediger-F8IAN0lyFJU-unsplash.jpg)',
+  'url(/imgs/backgroundImages/pexels-antoni-shkraba-6207767.jpg)',
+  'url(/imgs/backgroundImages/floriane-vita-FyD3OWBuXnY-unsplash.jpg)',
+  'url(/imgs/backgroundImages/pexels-ono-kosuki-5999936.jpg)',
+  'url(/imgs/backgroundImages/pexels-adrien-olichon-3709402.jpg)',
+  'url(/imgs/backgroundImages/pexels-cup-of-couple-6634170.jpg)',
 ];
 
 // Elements

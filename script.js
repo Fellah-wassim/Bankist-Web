@@ -291,6 +291,8 @@ btnTransfer.addEventListener('click', function (e) {
     inputTransferTo.value = inputTransferAmount.value = '';
     inputTransferAmount.blur();
     receiverAccount.movements.push(amount);
+    clearInterval(timerCopy);
+    startLogOutTimer();
   }
 });
 
@@ -301,6 +303,8 @@ btnLoan.addEventListener('click', function (e) {
     currentAccount.movements.push(amount);
     currentAccount.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
+    clearInterval(timerCopy);
+    startLogOutTimer();
   }
   inputLoanAmount.value = '';
 });

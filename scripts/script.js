@@ -304,14 +304,31 @@ btnLogin.addEventListener('click', function (e) {
   currentAccount = accounts.find(
     account => account.userName === inputLoginUsername.value
   );
-  if (+inputLoginPin.value === currentAccount?.pin) {
-    labelWelcome.textContent = `Welcome back ${
-      currentAccount.owner.split(' ')[0]
-    }!`;
-    updateUI(currentAccount);
-    whenLogInDisplay();
-    startLogOutTimer();
-    stopDisplayingBackgrounds();
+  switch (true) {
+    case +inputLoginPin.value === currentAccount?.pin:
+      {
+        labelWelcome.textContent = `Welcome back ${
+          currentAccount.owner.split(' ')[0]
+        }!`;
+        labelWelcome.style.color = '#444';
+        updateUI(currentAccount);
+        whenLogInDisplay();
+        startLogOutTimer();
+        stopDisplayingBackgrounds();
+      }
+      break;
+    case !currentAccount:
+      {
+        labelWelcome.textContent = 'Invalid username';
+        labelWelcome.style.color = '#e52a5a';
+      }
+      break;
+    case currentAccount?.pin != +inputLoginPin.value:
+      {
+        labelWelcome.textContent = 'incorrect PIN';
+        labelWelcome.style.color = '#e52a5a';
+      }
+      break;
   }
 });
 

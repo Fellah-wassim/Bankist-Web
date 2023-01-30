@@ -324,7 +324,8 @@ btnTransfer.addEventListener('click', function (e) {
   const balance = parseFloat(labelBalance.textContent.replace(/[^\d.-]/g, ''));
   if (
     receiverAccount?.userName != currentAccount.userName &&
-    amount <= balance
+    amount <= balance &&
+    typeof receiverAccount != 'undefined'
   ) {
     currentAccount.movements.push(-amount);
     currentAccount.movementsDates.push(new Date().toISOString());
@@ -332,6 +333,7 @@ btnTransfer.addEventListener('click', function (e) {
     inputTransferTo.value = inputTransferAmount.value = '';
     inputTransferAmount.blur();
     receiverAccount.movements.push(amount);
+    receiverAccount.movementsDates.push(new Date().toISOString());
     clearInterval(timerCopy);
     startLogOutTimer();
   }

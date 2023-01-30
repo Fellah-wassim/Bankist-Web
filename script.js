@@ -233,10 +233,32 @@ const updateUI = function (account) {
   calcDisplayBalance(account);
 };
 
+let timerCopy;
+const startLogOutTimer = function () {
+  let time = 600;
+  const tick = function () {
+    const min = String(Math.trunc(time / 60)).padStart(2, 0);
+    const sec = String(time % 60).padStart(2, 0);
+    labelTimer.textContent = `${min}:${sec}`;
+    if (time === 0) {
+      clearInterval(timer);
+      whenLogOutDisplay();
+    }
+    time--;
+  };
+  tick();
+  const timer = setInterval(tick, 1000);
+  timerCopy = timer;
+};
+
 //Event handlers
-btnLogout.addEventListener('click', whenLogOutDisplay);
+btnLogout.addEventListener('click', function () {
+  whenLogOutDisplay();
+  if (timerCopy) clearInterval(timerCopy);
+});
 
 let currentAccount;
+
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(
@@ -248,6 +270,7 @@ btnLogin.addEventListener('click', function (e) {
     }!`;
     updateUI(currentAccount);
     whenLogInDisplay();
+    startLogOutTimer();
   }
 });
 
@@ -257,9 +280,10 @@ btnTransfer.addEventListener('click', function (e) {
   const receiverAccount = accounts.find(
     account => account.userName === inputTransferTo.value
   );
+  const balance = parseFloat(labelBalance.textContent.replace(/[^\d.-]/g, ''));
   if (
     receiverAccount?.userName != currentAccount.userName &&
-    amount <= +labelBalance.textContent.replace('€', '')
+    amount <= balance
   ) {
     currentAccount.movements.push(-amount);
     currentAccount.movementsDates.push(new Date().toISOString());

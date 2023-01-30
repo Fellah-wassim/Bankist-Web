@@ -55,7 +55,19 @@ const optionsTime = {
   hour12: 'true',
 };
 
+const backgroundPicsUrls = [
+  'url(/backgroundImages/pexels-cup-of-couple-6956764.jpg)',
+  'url(/backgroundImages/christian-wiediger-F8IAN0lyFJU-unsplash.jpg)',
+  'url(/backgroundImages/pexels-antoni-shkraba-6207767.jpg)',
+  'url(/backgroundImages/floriane-vita-FyD3OWBuXnY-unsplash.jpg)',
+  'url(/backgroundImages/pexels-ono-kosuki-5999936.jpg)',
+  'url(/backgroundImages/pexels-adrien-olichon-3709402.jpg)',
+  'url(/backgroundImages/pexels-cup-of-couple-6634170.jpg)',
+];
+
 // Elements
+const body = document.querySelector('body');
+const navbar = document.querySelector('.navbar');
 const labelWelcome = document.querySelector('.welcome');
 const labelDate = document.querySelector('.date');
 const labelBalance = document.querySelector('.balance__value');
@@ -251,8 +263,36 @@ const startLogOutTimer = function () {
   timerCopy = timer;
 };
 
+let picIntervalIdCopy;
+const displayingBackgrounds = function () {
+  body.style.background = backgroundPicsUrls[0];
+  body.style.backgroundSize = 'cover';
+  body.style.padding = '2rem 4rem';
+  navbar.style.backgroundColor = '#f3f3f3';
+  containerApp.style.margin = '2rem auto';
+  let index = 1;
+  const picIntervalId = setInterval(() => {
+    const picture = backgroundPicsUrls[index];
+    body.style.background = `${picture}`;
+    body.style.backgroundSize = 'cover';
+    index++;
+    if (index === backgroundPicsUrls.length) index = 0;
+  }, 5000);
+  picIntervalIdCopy = picIntervalId;
+};
+displayingBackgrounds();
+
+const stopDisplayingBackgrounds = function () {
+  body.style.background = 'none';
+  body.style.padding = '0 2rem';
+  navbar.style.backgroundColor = '#fff';
+  containerApp.style.margin = '0 auto';
+  clearInterval(picIntervalIdCopy);
+};
+
 //Event handlers
 btnLogout.addEventListener('click', function () {
+  displayingBackgrounds();
   whenLogOutDisplay();
   if (timerCopy) clearInterval(timerCopy);
 });
@@ -271,6 +311,7 @@ btnLogin.addEventListener('click', function (e) {
     updateUI(currentAccount);
     whenLogInDisplay();
     startLogOutTimer();
+    stopDisplayingBackgrounds();
   }
 });
 
@@ -321,6 +362,7 @@ btnClose.addEventListener('click', function (e) {
     console.log(indexOfDeletedAccount);
     accounts.splice(indexOfDeletedAccount, 1);
     whenLogOutDisplay();
+    displayingBackgrounds();
   }
 });
 

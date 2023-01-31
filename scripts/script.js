@@ -61,8 +61,8 @@ const backgroundPicsUrls = [
   'url(/imgs/backgroundImages/pexels-antoni-shkraba-6207767.jpg)',
   'url(/imgs/backgroundImages/floriane-vita-FyD3OWBuXnY-unsplash.jpg)',
   'url(/imgs/backgroundImages/pexels-ono-kosuki-5999936.jpg)',
-  'url(/imgs/backgroundImages/pexels-adrien-olichon-3709402.jpg)',
   'url(/imgs/backgroundImages/pexels-cup-of-couple-6634170.jpg)',
+  'url(/imgs/backgroundImages/pexels-adrien-olichon-3709402.jpg)',
 ];
 
 // Elements

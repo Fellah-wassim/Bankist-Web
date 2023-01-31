@@ -223,6 +223,7 @@ const whenLogOutDisplay = function () {
   loginForm.style.display = 'block';
   labelWelcome.textContent = 'Log in to get started';
   allFormInput.forEach(form => (form.value = ''));
+  displayMessageToUser('Log in to get started', '#444');
 };
 
 const whenLogInDisplay = function () {
@@ -290,6 +291,27 @@ const stopDisplayingBackgrounds = function () {
   clearInterval(picIntervalIdCopy);
 };
 
+const displayMessageToUser = function (message, color) {
+  clearTimeout(timeoutID);
+  labelWelcome.textContent = `${message}`;
+  labelWelcome.style.color = `${color}`;
+};
+
+let timeoutID;
+const displayMessageToUserForTenSecond = function (message, color) {
+  displayMessageToUser(message, color);
+  timeoutID = setTimeout(() => {
+    labelWelcome.textContent = '';
+  }, 10000);
+};
+
+const displayMessageToUserInHomePage = function (message, color) {
+  displayMessageToUser(message, color);
+  timeoutID = setTimeout(() => {
+    displayMessageToUser('Log in to get Started', '#444');
+  }, 10000);
+};
+
 //Event handlers
 btnLogout.addEventListener('click', function () {
   displayingBackgrounds();
@@ -319,14 +341,12 @@ btnLogin.addEventListener('click', function (e) {
       break;
     case !currentAccount:
       {
-        labelWelcome.textContent = 'Invalid username';
-        labelWelcome.style.color = '#e52a5a';
+        displayMessageToUserInHomePage('Invalid username', '#e52a5a');
       }
       break;
     case currentAccount?.pin != +inputLoginPin.value:
       {
-        labelWelcome.textContent = 'incorrect PIN';
-        labelWelcome.style.color = '#e52a5a';
+        displayMessageToUserInHomePage('incorrect PIN', '#e52a5a');
       }
       break;
   }
@@ -334,25 +354,44 @@ btnLogin.addEventListener('click', function (e) {
 
 btnTransfer.addEventListener('click', function (e) {
   e.preventDefault();
-  const amount = +inputTransferAmount.value;
+  const amount = Math.abs(+inputTransferAmount.value);
   const receiverAccount = accounts.find(
     account => account.userName === inputTransferTo.value
   );
   const balance = parseFloat(labelBalance.textContent.replace(/[^\d.-]/g, ''));
-  if (
-    receiverAccount?.userName != currentAccount.userName &&
-    amount <= balance &&
-    typeof receiverAccount != 'undefined'
-  ) {
-    currentAccount.movements.push(-amount);
-    currentAccount.movementsDates.push(new Date().toISOString());
-    updateUI(currentAccount);
-    inputTransferTo.value = inputTransferAmount.value = '';
-    inputTransferAmount.blur();
-    receiverAccount.movements.push(amount);
-    receiverAccount.movementsDates.push(new Date().toISOString());
-    clearInterval(timerCopy);
-    startLogOutTimer();
+  switch (true) {
+    case receiverAccount?.userName != currentAccount.userName &&
+      amount <= balance &&
+      amount > 0 &&
+      typeof receiverAccount != 'undefined':
+      {
+        currentAccount.movements.push(-amount);
+        currentAccount.movementsDates.push(new Date().toISOString());
+        updateUI(currentAccount);
+        inputTransferTo.value = inputTransferAmount.value = '';
+        inputTransferAmount.blur();
+        receiverAccount.movements.push(amount);
+        receiverAccount.movementsDates.push(new Date().toISOString());
+        clearInterval(timerCopy);
+        startLogOutTimer();
+        displayMessageToUserForTenSecond(
+          'Operation successfully done',
+          '#39b385'
+        );
+      }
+      break;
+    case !receiverAccount:
+      displayMessageToUserForTenSecond('No user with this ID', '#e52a5a');
+      break;
+    case amount > balance:
+      displayMessageToUserForTenSecond(
+        'No enough money for this transfer',
+        '#e52a5a'
+      );
+      break;
+    case amount === 0:
+      displayMessageToUserForTenSecond('Enter the amount', '#e52a5a');
+      break;
   }
 });
 
@@ -363,8 +402,12 @@ btnLoan.addEventListener('click', function (e) {
     currentAccount.movements.push(amount);
     currentAccount.movementsDates.push(new Date().toISOString());
     updateUI(currentAccount);
+    displayMessageToUserForTenSecond('Loaned successfully', '#39b385');
     clearInterval(timerCopy);
     startLogOutTimer();
+  } else {
+    if (amount === 0)
+      displayMessageToUserForTenSecond('Enter amount', '#e52a5a');
   }
   inputLoanAmount.value = '';
 });

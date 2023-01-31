@@ -19,7 +19,6 @@ body {
   font-family: 'Poppins', sans-serif;
   color: #444;
   height: 100vh;
-  background: url(/imgs/backgroundImages/pexels-adrien-olichon-3709402.jpg);
   transition: all 1.8s ease-in-out;
   background-size: cover;
   padding: 2rem 4rem;

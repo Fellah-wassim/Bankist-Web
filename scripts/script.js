@@ -274,10 +274,14 @@ const displayingBackgrounds = function () {
   let index = 1;
   const picIntervalId = setInterval(() => {
     const picture = backgroundPicsUrls[index];
-    body.style.background = `${picture}`;
-    body.style.backgroundSize = 'cover';
-    index++;
-    if (index === backgroundPicsUrls.length) index = 0;
+    var image = new Image();
+    image.src = `${picture}`.replace('url(/', '').replace(')', '');
+    image.onload = function () {
+      body.style.background = `${picture}`;
+      body.style.backgroundSize = 'cover';
+      index++;
+      if (index === backgroundPicsUrls.length) index = 0;
+    };
   }, 5000);
   picIntervalIdCopy = picIntervalId;
 };
@@ -447,8 +451,3 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const withdrawals = movements.filter(mov => mov < 0);
-
-const loader = document.getElementById('preloader');
-window.addEventListener('load', function () {
-  loader.style.display = 'none';
-});

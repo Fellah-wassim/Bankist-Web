@@ -384,6 +384,13 @@ btnTransfer.addEventListener('click', function (e) {
         );
       }
       break;
+    case receiverAccount.userName === currentAccount.userName: {
+      displayMessageToUserForTenSecond(
+        "You can't transfer to your account",
+        '#e52a5a'
+      );
+      break;
+    }
     case !receiverAccount:
       displayMessageToUserForTenSecond('No user with this ID', '#e52a5a');
       break;

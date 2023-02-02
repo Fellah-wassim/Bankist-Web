@@ -41,7 +41,10 @@ const account2 = {
   local: 'fr-FR',
 };
 
-const accounts = [account1, account2];
+let accounts = [account1, account2];
+
+//recover saved data from the local storage
+accounts = JSON.parse(localStorage.getItem('accounts'));
 
 const optionsDate = {
   day: 'numeric',
@@ -378,6 +381,8 @@ btnTransfer.addEventListener('click', function (e) {
         receiverAccount.movementsDates.push(new Date().toISOString());
         clearInterval(timerCopy);
         startLogOutTimer();
+        // Save the array to local storage
+        localStorage.setItem('accounts', JSON.stringify(accounts));
         displayMessageToUserForTenSecond(
           'Operation successfully done',
           '#39b385'
@@ -416,6 +421,8 @@ btnLoan.addEventListener('click', function (e) {
     displayMessageToUserForTenSecond('Loaned successfully', '#39b385');
     clearInterval(timerCopy);
     startLogOutTimer();
+    // Save the array to local storage
+    localStorage.setItem('accounts', JSON.stringify(accounts));
   } else {
     if (amount === 0)
       displayMessageToUserForTenSecond('Enter amount', '#e52a5a');
@@ -436,6 +443,8 @@ btnClose.addEventListener('click', function (e) {
     accounts.splice(indexOfDeletedAccount, 1);
     whenLogOutDisplay();
     displayingBackgrounds();
+    // Save the array to local storage
+    localStorage.setItem('accounts', JSON.stringify(accounts));
   }
 });
 
@@ -458,3 +467,6 @@ const currencies = new Map([
 
 const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
 const withdrawals = movements.filter(mov => mov < 0);
+
+// Retrieve the array from local storage
+const retrievedArray = JSON.parse(localStorage.getItem('accounts'));

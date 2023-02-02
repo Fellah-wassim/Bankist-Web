@@ -37,15 +37,16 @@ const account2 = {
     '2020-06-25T18:49:59.371Z',
     '2020-07-26T12:01:20.894Z',
   ],
-  currency: 'DZD',
+  currency: 'EUR',
   local: 'fr-FR',
 };
 
 let accounts = [account1, account2];
 
-//recover saved data from the local storage
-if (accounts.length > 2)
+//recover saved data from the local storage if its stored
+if (localStorage.length != 0) {
   accounts = JSON.parse(localStorage.getItem('accounts'));
+}
 
 const optionsDate = {
   day: 'numeric',
@@ -328,7 +329,6 @@ btnLogout.addEventListener('click', function () {
 });
 
 let currentAccount;
-
 btnLogin.addEventListener('click', function (e) {
   e.preventDefault();
   currentAccount = accounts.find(

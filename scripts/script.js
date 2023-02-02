@@ -44,7 +44,8 @@ const account2 = {
 let accounts = [account1, account2];
 
 //recover saved data from the local storage
-accounts = JSON.parse(localStorage.getItem('accounts'));
+if (accounts.length > 2)
+  accounts = JSON.parse(localStorage.getItem('accounts'));
 
 const optionsDate = {
   day: 'numeric',

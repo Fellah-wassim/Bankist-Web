@@ -1,0 +1,7 @@
+TODO: Add the functionality of sign up
+
+TODO: Add the functionality of changing money from USD to EUR and the opposite
+
+TODO: Make the website responsive
+
+TODO: Add more pics to the background display

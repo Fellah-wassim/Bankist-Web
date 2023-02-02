@@ -464,9 +464,3 @@ const currencies = new Map([
   ['EUR', 'Euro'],
   ['GBP', 'Pound sterling'],
 ]);
-
-const movements = [200, 450, -400, 3000, -650, -130, 70, 1300];
-const withdrawals = movements.filter(mov => mov < 0);
-
-// Retrieve the array from local storage
-const retrievedArray = JSON.parse(localStorage.getItem('accounts'));
